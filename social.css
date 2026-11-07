@@ -62,3 +62,28 @@
   .social-post { animation: social-arrive .35s ease-out both; }
 }
 @keyframes social-arrive { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Civic theme + mobile for the community feed */
+.community-feed-head h2,
+.social-post-title,
+.social-pulse h3,
+.agent-share-panel h3 { font-family: var(--sans); font-weight: 700; color: var(--forest-deep); letter-spacing: -0.01em; }
+.community-feed-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.social-post blockquote,
+.agent-share-panel blockquote { font-family: var(--sans); font-size: 1.05rem; }
+.social-post, .social-pulse, .agent-share-panel { border-radius: 4px; box-shadow: 0 1px 3px rgba(20, 30, 50, 0.08); }
+.agent-share-panel { background: #ffffff; border-left: 4px solid var(--forest); }
+.social-brief, .social-share-brief { border-radius: 0; background: var(--surface-2); }
+.social-kicker { font-size: 12.5px; font-weight: 650; letter-spacing: 0; text-transform: none; }
+.social-react { border-radius: 3px; border-color: var(--forest); color: var(--forest); }
+.social-brief a, .social-share-sources a { padding: 6px 0; font-size: 13px; color: var(--teal-deep); }
+.social-nav-indicator { border-radius: 3px; font-size: 10px; }
+.social-show-more { margin-top: 4px; }
+@media (max-width: 760px) {
+  .social-post { padding: 16px 14px; }
+  .social-brief { padding: 12px; }
+  .social-react { width: 100%; min-height: 46px; }
+  .social-post-actions { flex-direction: column; align-items: stretch; }
+  .community-feed-list.is-collapsed .social-post:nth-child(n + 4) { display: none; }
+}
+@media (min-width: 761px) { .social-show-more { display: none; } }

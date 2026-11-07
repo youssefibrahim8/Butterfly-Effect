@@ -6,12 +6,38 @@ const sourceById = new Map(sources.map((item) => [item.id, item]));
 const feed = document.querySelector("#community-feed-list");
 const sharePanel = document.querySelector("#agent-share-panel");
 const liveStatus = document.querySelector("#community-feed-status");
+
+// On phones, show the first three posts with a toggle for the rest.
+const showMore = document.createElement("button");
+showMore.type = "button";
+showMore.className = "button button-ghost social-show-more";
+feed.classList.add("is-collapsed");
+feed.after(showMore);
+function updateShowMore(count) {
+  const collapsed = feed.classList.contains("is-collapsed");
+  showMore.hidden = count <= 3;
+  showMore.textContent = collapsed ? `Show all ${count} posts` : "Show fewer posts";
+  showMore.setAttribute("aria-expanded", String(!collapsed));
+}
+showMore.addEventListener("click", () => {
+  feed.classList.toggle("is-collapsed");
+  updateShowMore(feed.querySelectorAll(".social-post").length);
+});
 const feedLink = document.querySelector('.header-nav a[href="#community-feed"]');
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 }[char]));
 
 const seedPosts = [
+  {
+    id: "sample-food", opportunityId: "food-access-navigator", label: "Sample parent · fictional",
+    concern: "We run out of groceries the last week of every month, and the food bank runs out before we get to the front of the line.",
+    summary: "A short, optional benefits check-in at the food bank could help families claim supports they are missing.",
+    why: "Food insecurity is driven mainly by low and insecure income, and many food-insecure households do not use food banks at all.",
+    uncertainty: "The sample does not know how many local families qualify for supports they are not receiving.",
+    nextStep: "Ask the food bank whether a free tax clinic or benefits worker could join one weekly distribution.",
+    sourceIds: ["proof-food", "fbc-hungercount"], support: 9,
+  },
   {
     id: "sample-1", opportunityId: "senior-cool-bundles", label: "Sample resident · fictional",
     concern: "My grandmother's apartment stays hot overnight, but she worries about running the air conditioner.",
@@ -143,6 +169,7 @@ function renderPost(post) {
 function renderFeed() {
   const sorted = communityPosts().sort((a, b) => signalsFor(b.opportunityId).total - signalsFor(a.opportunityId).total);
   feed.innerHTML = sorted.map(renderPost).join("");
+  updateShowMore(sorted.length);
   const totals = [...new Set(sorted.map((post) => post.opportunityId).filter(Boolean))]
     .map((id) => ({ id, ...signalsFor(id) })).sort((a, b) => b.total - a.total);
   document.querySelector("#community-opportunity-pulse").innerHTML = totals.map(({ id, total }) => {

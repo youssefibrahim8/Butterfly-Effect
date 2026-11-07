@@ -2891,3 +2891,64 @@ h1, h2, h3, h4,
 .connection-score strong,
 .candidate-score strong { font-family: var(--sans); font-weight: 700; }
 .concern-recap { border-left-color: var(--forest) !important; }
+
+/* ========================================================================== */
+/* Mobile                                                                     */
+/* ========================================================================== */
+
+/* Detail panels: let grid columns shrink instead of overflowing. */
+.panel-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.panel, .connection-grid > *, .connection-caution-grid > * { min-width: 0; }
+
+/* Inputs at 16px so iOS does not zoom on focus. */
+#search, #sort, .form-field input, .form-field textarea { font-size: 16px; }
+
+@media (max-width: 760px) {
+  /* Compact header that scrolls away; nav stays one swipeable row. */
+  .site-header { position: relative; border-top-width: 4px; }
+  .header-inner { padding-top: 8px; }
+  .brand { padding-bottom: 8px; }
+  .brand-mark { width: 32px; height: 32px; }
+  .brand-mark svg { width: 26px; height: 26px; }
+  .brand-word { font-size: 18px; }
+  .header-nav { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .header-nav::-webkit-scrollbar { display: none; }
+  .header-nav .nav-link { padding: 12px 12px; min-height: 44px; }
+
+  /* Banner and hero spacing. */
+  .civic-banner { padding: 20px 12px; }
+  .civic-banner-card { padding: 20px 16px; }
+  .civic-banner-card h1 { font-size: 1.6rem; }
+  .civic-banner-card .hero-lede { font-size: 15.5px; }
+  .civic-banner-actions .button { flex: 1 1 100%; min-height: 48px; }
+  .hero { padding: 24px 0 16px; }
+  .concern-card { padding: 18px 16px; }
+  .concern-actions .button { width: 100%; min-height: 48px; }
+
+  /* Tap targets. */
+  .filter-group button, .filter-chip, [data-filter] { min-height: 44px; }
+  .mini-source { padding: 10px 12px; }
+  .text-button { padding: 10px 0; }
+
+  /* Results: less nested padding, single-column brief. */
+  .discovery-shell { padding: 18px 14px; }
+  .match-note, .agent-trace, .connection-card, .concern-recap { padding: 16px 14px; }
+  .agent-brief { padding: 14px; }
+  .agent-brief-grid { grid-template-columns: 1fr; }
+  .agent-step { padding: 10px; }
+  .agent-question .button { flex: 1 1 100%; min-height: 48px; }
+  .discovery-head { flex-direction: column; align-items: stretch; gap: 12px; }
+  .discovery-edit { align-self: flex-start; }
+  .connection-head { flex-direction: column; }
+
+  /* Model card table scrolls inside its box. */
+  .confusion { min-width: 560px; }
+}
+
+@media (max-width: 760px) {
+  .panel-head { flex-wrap: wrap; gap: 8px; }
+  .time-pill { white-space: normal; max-width: 100%; }
+}
+
+/* Full-bleed banner uses 100vw; clip the scrollbar-width overflow it causes. */
+html, body { overflow-x: clip; }
