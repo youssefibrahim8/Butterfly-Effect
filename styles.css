@@ -566,7 +566,7 @@ main {
   overflow: hidden;
   padding: 25px 26px 24px;
   border: 1px solid rgba(247, 241, 229, 0.08);
-  border-radius: 29px;
+  border-radius: 12px;
   background:
     radial-gradient(120% 105% at 110% -8%, rgba(212, 101, 58, 0.33), transparent 55%),
     radial-gradient(100% 100% at -10% 110%, rgba(109, 155, 120, 0.22), transparent 58%),
@@ -860,7 +860,7 @@ main {
   margin-top: 22px;
   padding: 9px;
   border: 1px solid rgba(222, 216, 202, 0.9);
-  border-radius: 18px;
+  border-radius: 10px;
   background: rgba(254, 252, 247, 0.68);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.65) inset,
@@ -1049,7 +1049,7 @@ main {
   overflow: hidden;
   padding: 19px 19px 16px;
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 12px;
   outline: none;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), var(--surface));
   color: var(--ink);

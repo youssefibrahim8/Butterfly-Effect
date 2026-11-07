@@ -81,17 +81,12 @@
     <main id="main" tabindex="-1">
       <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">
-            <span class="eyebrow-rule"></span>Community research, grounded in sources
-          </p>
-          <h1 id="hero-title">
-            Start with a concern.<br /><em>Find a thread worth pulling.</em>
-          </h1>
+          <p class="eyebrow">For residents and community groups</p>
+          <h1 id="hero-title">Describe a problem on your street. See what the evidence says.</h1>
           <p class="hero-lede">
-            Share what you are seeing in your community. Butterfly Effect looks for possible
-            connections in a small, source-linked sample — then shows what is
-            <strong>supported</strong>, what is <strong>inferred</strong>, what is uncertain, and
-            one practical next step.
+            A small model we trained ourselves reads your concern and matches it to one of four
+            researched heat and health interventions. You get the sources behind it, what is still
+            uncertain, and one thing you could try next.
           </p>
           <div class="hero-principles" aria-label="How information is labeled">
             <span class="principle principle--community">Community input</span>
@@ -99,8 +94,7 @@
             <span class="principle principle--inferred">System-inferred hypotheses</span>
           </div>
           <p class="hero-disclaimer">
-            <span>Guardrail</span> Matches are suggestions to investigate — not verified causes
-            or guaranteed solutions.
+            Results are leads to look into, not proven causes or guaranteed fixes.
           </p>
           <p class="hero-secondary">
             Prefer to browse first?
@@ -111,12 +105,8 @@
         <aside class="concern-card" id="share" aria-labelledby="concern-title">
           <form id="concern-form" class="concern-form" novalidate>
             <div class="concern-card-head">
-              <span class="info-label info-label--community">Community input</span>
-              <h2 id="concern-title">Share a community concern</h2>
-              <p>
-                Start with what you are seeing. We will look for possible threads in this small,
-                source-linked sample.
-              </p>
+              <h2 id="concern-title">What's going on?</h2>
+              <p>A few plain sentences is enough.</p>
             </div>
 
             <div
@@ -187,7 +177,7 @@
 
             <div class="concern-actions">
               <button class="button button-primary concern-submit" type="submit">
-                Find possible connections <span aria-hidden="true">→</span>
+                Investigate this concern
               </button>
               <button class="button button-ghost" type="button" data-sample-concern>
                 Try a sample concern
@@ -195,9 +185,7 @@
             </div>
 
             <p class="privacy-note">
-              <span aria-hidden="true">◌</span>
-              Nothing is sent anywhere. This demo runs entirely in your browser — no account, API
-              key, or internet connection needed.
+              Runs in your browser. Nothing you type is sent or saved.
             </p>
           </form>
         </aside>
@@ -295,7 +283,6 @@
         <div class="candidate-grid" id="candidate-grid" aria-live="polite"></div>
 
         <div class="empty-state" id="empty-state" hidden>
-          <span class="empty-mark" aria-hidden="true">◌</span>
           <h3>No opportunities match that search.</h3>
           <p>Try a broader term, or reset the view to the full sample.</p>
           <button class="button button-ghost" type="button" id="reset-view">Reset view</button>
@@ -330,10 +317,9 @@
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-brand">
-          <span class="footer-mark" aria-hidden="true">✦</span>
           <div>
             <strong>Butterfly Effect</strong>
-            <span>Community concern discovery · local sample data · works offline</span>
+            <span>Built for Cortex 2026 · runs offline on sample data</span>
           </div>
         </div>
         <p class="footer-note">
