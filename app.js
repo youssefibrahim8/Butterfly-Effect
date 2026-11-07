@@ -1,5 +1,6 @@
 import { meta, opportunities, sources } from "./data.js";
-import { concernExamples, matchConcern, sampleConcern } from "./community.js";
+import { concernExamples, sampleConcern } from "./community.js";
+import { runAgent } from "./agent.js";
 
 /* -------------------------------------------------------------------------- */
 /* Helpers                                                                    */
@@ -1340,8 +1341,8 @@ function connectionMarkup(match) {
       </div>
 
       <p class="connection-guardrail">
-        <strong>Keep this in perspective.</strong> This is a sample-data suggestion built from word
-        overlap. It is not a verified cause, a diagnosis, or a guaranteed solution. A real next step
+        <strong>Keep this in perspective.</strong> This is a sample-data suggestion from a small model
+        trained on example concerns. It is not a verified cause, a diagnosis, or a guaranteed solution. A real next step
         would involve affected residents, local experts, and local data.
       </p>
     </article>
@@ -1462,17 +1463,161 @@ function discoveryLede(count) {
   }
   return `We found ${count} possible sample connection${
     count === 1 ? "" : "s"
-  } from overlapping words. These are suggestions to investigate — not verified causes or guaranteed solutions.`;
+  } using our own trained model. These are suggestions to investigate — not verified causes or guaranteed solutions.`;
 }
 
-function renderDiscovery(concern, matches) {
+function agentModeChip() {
+  return `<span class="local-chip agent-chip agent-chip--live">Our own trained model · no AI API</span>`;
+}
+
+const LABEL_NAMES = {
+  "out-of-scope": "Outside this sample",
+};
+
+function modelBarsMarkup(prediction) {
+  if (!prediction) return "";
+  return `
+    <div class="model-bars" aria-label="Model probabilities">
+      <span class="model-bars-title">What our model thinks</span>
+      ${prediction.ranked
+        .map((label) => {
+          const p = prediction.probabilities[label];
+          const name = LABEL_NAMES[label] ?? opportunityById.get(label)?.title ?? label;
+          return `
+            <div class="model-bar ${label === prediction.label ? "is-top" : ""}">
+              <span class="model-bar-name">${escapeHtml(name)}</span>
+              <span class="model-bar-track"><span style="width:${(p * 100).toFixed(1)}%"></span></span>
+              <span class="model-bar-pct">${Math.round(p * 100)}%</span>
+            </div>`;
+        })
+        .join("")}
+      ${
+        prediction.topWords?.length
+          ? `<div class="cue-chips" aria-label="Words that drove the decision"><span class="model-bars-title">Words that drove it</span>${cueChipsMarkup(prediction.topWords)}</div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function agentStepsMarkup(tools = []) {
+  return `
+    <ol class="agent-steps">
+      ${tools
+        .map(
+          (tool, index) => `
+            <li class="agent-step" style="--step:${index}">
+              <span class="agent-step-num" aria-hidden="true">${index + 1}</span>
+              <div>
+                <strong>${escapeHtml(tool.name)}</strong>
+                <p>${escapeHtml(tool.detail)}</p>
+              </div>
+            </li>
+          `,
+        )
+        .join("")}
+    </ol>
+  `;
+}
+
+function agentTraceMarkup(result) {
+  const brief = result.brief;
+  const cited = result.sources ?? [];
+  const briefMarkup = brief
+    ? `
+      <div class="agent-brief">
+        <span class="info-label info-label--inferred">Agent brief · system-inferred</span>
+        <p class="agent-brief-summary">${escapeHtml(brief.summary)}</p>
+        <dl class="agent-brief-grid">
+          <div><dt>Why this thread</dt><dd>${escapeHtml(brief.why)}</dd></div>
+          <div><dt>What's uncertain</dt><dd>${escapeHtml(brief.uncertainty)}</dd></div>
+          <div><dt>One next step</dt><dd>${escapeHtml(brief.nextStep)}</dd></div>
+        </dl>
+      </div>`
+    : "";
+  const sourcesMarkup = cited.length
+    ? `<div class="agent-sources">
+         <span>${brief ? "Sources the agent cited" : "Evidence the agent ranked"}</span>
+         <div class="mini-source-list">${cited.map(miniSourceMarkup).join("")}</div>
+       </div>`
+    : "";
+
+  return `
+    <aside class="match-note agent-trace" aria-label="What the agent did">
+      <div class="match-note-head">
+        <div>
+          <span class="info-label info-label--inferred">Agent run</span>
+          <h3>How the agent investigated this</h3>
+        </div>
+        ${agentModeChip(result)}
+      </div>
+      ${agentStepsMarkup(result.tools)}
+      ${modelBarsMarkup(result.prediction)}
+      ${briefMarkup}
+      ${sourcesMarkup}
+    </aside>
+  `;
+}
+
+function agentWorkingMarkup(concern) {
+  return `
+    <div class="discovery-shell">
+      <header class="discovery-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-rule"></span>Agent at work</p>
+          <h2 id="discovery-title" tabindex="-1">Investigating your concern…</h2>
+          <p class="discovery-lede">The agent is deciding what to check, searching the evidence library, and comparing opportunity paths.</p>
+        </div>
+      </header>
+      ${concernRecapMarkup(concern)}
+      <div class="agent-working" role="status">
+        <span class="agent-spinner" aria-hidden="true"></span>
+        Triage → match opportunities → search evidence → write a cited brief
+      </div>
+    </div>
+  `;
+}
+
+function clarificationMarkup(concern, result) {
+  return `
+    <div class="discovery-shell">
+      <header class="discovery-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-rule"></span>Agent needs one detail</p>
+          <h2 id="discovery-title" tabindex="-1">${escapeHtml(result.question)}</h2>
+          <p class="discovery-lede">Your answer changes which evidence and interventions fit, so the agent asked instead of guessing.</p>
+        </div>
+        <button class="button button-ghost discovery-edit" type="button" data-edit-concern>Edit concern</button>
+      </header>
+      ${concernRecapMarkup(concern)}
+      <div class="agent-question">
+        ${result.choices
+          .map(
+            (choice) =>
+              `<button class="button button-primary" type="button" data-agent-answer="${escapeHtml(choice)}">${escapeHtml(choice)}</button>`,
+          )
+          .join("")}
+      </div>
+      <aside class="match-note agent-trace">
+        <div class="match-note-head">
+          <div><span class="info-label info-label--inferred">Agent run so far</span></div>
+          ${agentModeChip(result)}
+        </div>
+        ${agentStepsMarkup(result.tools)}
+        ${modelBarsMarkup(result.prediction)}
+      </aside>
+    </div>
+  `;
+}
+
+function renderDiscovery(concern, matches, agentResult = null) {
   const count = matches.length;
 
   els.discovery.innerHTML = `
     <div class="discovery-shell">
       <header class="discovery-head">
         <div>
-          <p class="eyebrow"><span class="eyebrow-rule"></span>Discovery · local sample</p>
+          <p class="eyebrow"><span class="eyebrow-rule"></span>Discovery · agent result</p>
           <h2 id="discovery-title" tabindex="-1">${escapeHtml(discoveryHeadline(count))}</h2>
           <p class="discovery-lede">${escapeHtml(discoveryLede(count))}</p>
         </div>
@@ -1482,14 +1627,14 @@ function renderDiscovery(concern, matches) {
       </header>
 
       ${concernRecapMarkup(concern)}
-      ${matchNoteMarkup(matches[0]?.cueLabels ?? [], count)}
+      ${agentResult ? agentTraceMarkup(agentResult) : matchNoteMarkup(matches[0]?.cueLabels ?? [], count)}
 
       ${
         count
           ? `${connectionMarkup(matches[0])}
              ${otherThreadsMarkup(matches.slice(1))}
              <p class="discovery-scope">
-               <strong>A note on this result:</strong> the matcher compares words, not meaning. It can
+               <strong>A note on this result:</strong> the model learns word patterns, not meaning. It can
                miss a real connection or surface a loose one. The sources are real; the links between
                them are the sample's hypotheses. Treat every result as a question to check with people
                who know the place.
@@ -1508,6 +1653,37 @@ function scrollToDiscovery() {
     behavior: prefersReducedMotion ? "auto" : "smooth",
     block: "start",
   });
+}
+
+async function runAgentFlow(concern, settingAnswer = "") {
+  const runId = (state.agentRunId = (state.agentRunId ?? 0) + 1);
+  els.discovery.innerHTML = agentWorkingMarkup(concern);
+  els.discovery.hidden = false;
+  els.liveStatus.textContent = "The agent is investigating your concern.";
+  window.requestAnimationFrame(scrollToDiscovery);
+
+  const { concern: text, who, context } = concern;
+  const result = await runAgent({ concern: text, who, context, settingAnswer });
+  if (runId !== state.agentRunId) return;
+
+  if (result.needsClarification) {
+    state.pendingAgentConcern = concern;
+    els.discovery.innerHTML = clarificationMarkup(concern, result);
+    els.liveStatus.textContent = `The agent has a question: ${result.question}`;
+    $("#discovery-title")?.focus({ preventScroll: true });
+    return;
+  }
+
+  const matches = result.matches ?? [];
+  const shown = settingAnswer ? { ...concern, context: [concern.context, `Exposure: ${settingAnswer}`].filter(Boolean).join(" · ") } : concern;
+  renderDiscovery(shown, matches, result);
+  window.dispatchEvent(new CustomEvent("butterfly:agent-result", { detail: { concern: shown, result } }));
+  els.liveStatus.textContent = matches.length
+    ? `The agent found ${matches.length} possible sample connection${
+        matches.length === 1 ? "" : "s"
+      }. These are suggestions to investigate, not verified causes.`
+    : "The agent found no clear match in this sample and is offering examples instead of inventing a result.";
+  window.requestAnimationFrame(scrollToDiscovery);
 }
 
 function submitConcern(source = "community", label = "") {
@@ -1535,17 +1711,7 @@ function submitConcern(source = "community", label = "") {
   };
 
   state.concern = concern;
-  const matches = matchConcern(values);
-  renderDiscovery(concern, matches);
-  els.discovery.hidden = false;
-
-  els.liveStatus.textContent = matches.length
-    ? `Found ${matches.length} possible sample connection${
-        matches.length === 1 ? "" : "s"
-      }. These are suggestions to investigate, not verified causes.`
-    : "No clear match in this local sample. The demo is offering examples instead of inventing a result.";
-
-  window.requestAnimationFrame(scrollToDiscovery);
+  runAgentFlow(concern);
 }
 
 function editConcern() {
@@ -1764,6 +1930,13 @@ function bindEvents() {
     if (openTrigger) {
       event.preventDefault();
       openOpportunityFromDiscovery(openTrigger.dataset.openOpportunity);
+      return;
+    }
+
+    const answerTrigger = event.target.closest("[data-agent-answer]");
+    if (answerTrigger && state.pendingAgentConcern) {
+      event.preventDefault();
+      runAgentFlow(state.pendingAgentConcern, answerTrigger.dataset.agentAnswer);
       return;
     }
 

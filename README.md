@@ -30,6 +30,24 @@ $env:PORT=4174; node server.mjs
 
 `npm start` also works if your shell permits npm scripts.
 
+## The AI agent (Cortex: AI Agents track)
+
+Butterfly Effect runs on **our own AI model**, with no external AI API.
+
+- **Model** (`model.js`): a multinomial Naive Bayes text classifier (unigrams + bigrams, Laplace smoothing) written from scratch. It trains in the browser on load.
+- **Training data** (`training-data.js`): 75 hand-labeled, fictional resident concerns across 5 classes (four opportunity paths plus "outside this sample").
+- **Evaluation:** leave-one-out accuracy is about 70% (53/75). Small data, reported honestly. Re-run with `node -e "import('./model.js').then(m=>console.log(m.evaluate()))"`.
+- **Explainability:** for each prediction, the UI shows the probability of every class and the words that pushed it toward the winner.
+
+The **agent** (`agent.js`) uses the model's confidence to plan each run:
+
+1. **Classify** the concern with our model.
+2. **Decide:** if the top two paths are close, ask the resident one clarifying question chosen for that pair, then re-classify with the answer. If the concern looks out of scope, or confidence is too low, stop honestly instead of guessing.
+3. **Use tools:** read the chosen opportunity path, search the evidence library, and cross-check against the hand-written keyword rules.
+4. **Brief:** write a cited brief with the uncertainty and one practical next step.
+
+The discovery view shows every step. After each run, the app fires a `butterfly:agent-result` window event with `{ concern, result }` for other features to use.
+
 ## The demo flow
 
 1. **Share a community concern.** The homepage form asks what is happening, who or where it affects, and optional context or ideas. Click **Try a sample concern** to run a fictional composite through the flow.
@@ -45,7 +63,10 @@ Sample and example inputs are labeled **Sample input** or **Example input** in t
 | File | Purpose |
 | --- | --- |
 | `index.html` | App shell, concern form, hero, sample stats, discovery shell, portfolio, dialogs |
-| `community.js` | Fictional sample concern, five example concerns, transparent weighted keyword matcher |
+| `model.js` | Our Naive Bayes classifier: tokenizer, training, prediction, leave-one-out evaluation |
+| `training-data.js` | Labeled training concerns, clarifying questions, answer hints |
+| `agent.js` | Agent planner: classify, ask or stop, run tools, write the cited brief |
+| `community.js` | Fictional sample concern, five example concerns, transparent weighted keyword matcher (used as a cross-check) |
 | `data.js` | Local sample dataset: 11 sources, 4 opportunities, paths, scores, risks, next tests |
 | `app.js` | Concern intake and validation, discovery rendering, portfolio search/filter/sort, detail view, export |
 | `styles.css` | Core visual system and portfolio layout |
