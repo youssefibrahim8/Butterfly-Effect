@@ -20,6 +20,8 @@ You describe a concern in plain words. Our agent:
 
 Every step is shown on screen, along with the model's probability for each path and the words that drove its decision.
 
+5. **Builds community signal**: you can add your concern and its brief to a community feed, where neighbours mark "this affects me too". Signals are totalled per intervention, with fictional sample posts clearly separated from real ones, so a group can see which problems many people share.
+
 ### How we built it
 - Plain HTML, CSS, and JavaScript, with a zero-dependency Node server. It runs fully offline in the browser.
 - **Our own AI, no external API:** multinomial Naive Bayes over words and word pairs, with Laplace smoothing, trained in the browser on 125 hand-labeled, fictional resident concerns.
@@ -63,6 +65,8 @@ Start the server first with `node server.mjs` and open the URL it prints. Close 
 3. **Show the reasoning (30s).** Point at the step list: classify, scope check, re-classify with the answer, read the path, search evidence, cross-check, write the brief. Then the probability bars and "Words that drove it". "This is our own model, trained from scratch. No API."
 
 4. **The brief (20s).** Scroll to the brief and sources. "Every supported claim links to a real source, and it tells you what's uncertain and one low-cost next step."
+
+4b. **Community feed (15s).** In the panel under the result, click **Add to local feed**, then **This affects me too** on a post. "When residents report the same kind of problem, the signals add up, so a group can bring a stronger case to the city. Sample posts are labeled fictional, and support isn't treated as proof."
 
 5. **Honest no (15s).** Click **Edit concern** and type `The soccer field has no lights so we cannot play after dark.` with `Residents in Vanier, Ottawa`. "It's outside what we trained on, so it says so instead of making something up."
 

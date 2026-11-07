@@ -66,6 +66,7 @@ Sample and example inputs are labeled **Sample input** or **Example input** in t
 | `model.js` | Our Naive Bayes classifier: tokenizer, training, prediction, leave-one-out evaluation |
 | `training-data.js` | Labeled training concerns, clarifying questions, answer hints |
 | `agent.js` | Agent planner: classify, ask or stop, run tools, write the cited brief |
+| `social.js` / `social.css` | Community feed: share an agent brief, "this affects me too" reactions, per-path signal totals (saved only in this browser) |
 | `community.js` | Fictional sample concern, five example concerns, transparent weighted keyword matcher (used as a cross-check) |
 | `data.js` | Local sample dataset: 11 sources, 4 opportunities, paths, scores, risks, next tests |
 | `app.js` | Concern intake and validation, discovery rendering, portfolio search/filter/sort, detail view, export |

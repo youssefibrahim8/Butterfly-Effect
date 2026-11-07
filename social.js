@@ -186,7 +186,7 @@ function showAgentShare({ concern, result }) {
   </div><div class="social-share-actions"><button class="button button-primary" id="share-agent-brief" type="button">Add to local feed <span aria-hidden="true">→</span></button><button class="button button-ghost" id="dismiss-agent-share" type="button">Cancel</button></div>`;
 }
 
-document.addEventListener("butterfly:agent-result", (event) => showAgentShare(event.detail ?? {}));
+window.addEventListener("butterfly:agent-result", (event) => showAgentShare(event.detail ?? {}));
 
 sharePanel.addEventListener("click", (event) => {
   if (!event.target.closest("#share-agent-brief") || !pendingAgent) return;
