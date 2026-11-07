@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="detail.css" />
     <link rel="stylesheet" href="overlays.css" />
     <link rel="stylesheet" href="community.css" />
+    <link rel="stylesheet" href="social.css" />
     <script type="module" src="app.js"></script>
+    <script type="module" src="social.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -60,6 +62,7 @@
         <nav class="header-nav" aria-label="Primary">
           <a class="nav-link nav-link--primary" href="#share">Share a concern</a>
           <a class="nav-link" href="#portfolio">Sample opportunities</a>
+          <a class="nav-link" href="#community-feed">Community feed</a>
           <button class="nav-link" type="button" data-dialog="method">How it works</button>
           <button class="nav-link" type="button" data-dialog="evidence">
             Evidence library <span class="nav-count" id="nav-source-count">11</span>
@@ -284,6 +287,27 @@
           <p>Try a broader term, or reset the view to the full sample.</p>
           <button class="button button-ghost" type="button" id="reset-view">Reset view</button>
         </div>
+      </section>
+
+      <section class="community-feed" id="community-feed" aria-labelledby="community-feed-title">
+        <div class="community-feed-head">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-rule"></span>Community signal board · local demo</p>
+            <h2 id="community-feed-title">Concerns grow stronger together</h2>
+            <p>This feed combines fictional sample posts with activity saved only in this browser. It is not public or shared across devices. Signals can help frame what to investigate; they do not verify a cause or prove a solution works.</p>
+          </div>
+        </div>
+        <div class="agent-share-panel" id="agent-share-panel" aria-live="polite" hidden></div>
+        <div class="community-feed-grid">
+          <div class="community-feed-list" id="community-feed-list"></div>
+          <aside class="social-pulse" aria-labelledby="community-pulse-title">
+            <span class="info-label info-label--community">Signal summary</span>
+            <h3 id="community-pulse-title">What the demo is surfacing</h3>
+            <p>Each total separates fictional sample signals from posts and reactions made in this browser.</p>
+            <div id="community-opportunity-pulse"></div>
+          </aside>
+        </div>
+        <p id="community-feed-status" role="status" aria-live="polite"></p>
       </section>
 
       <section class="detail" id="detail" aria-label="Selected opportunity detail"></section>
