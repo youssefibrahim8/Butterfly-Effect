@@ -7,6 +7,7 @@ export const LABELS = [
   "senior-cool-bundles",
   "shade-school-routes",
   "overnight-cool-refuge",
+  "food-access-navigator",
   "out-of-scope",
 ];
 
@@ -85,7 +86,6 @@ export const trainingData = [
   ["out-of-scope", "Loud parties next door keep the whole street awake on weekends."],
   ["out-of-scope", "Our basement floods every spring when the snow melts."],
   ["out-of-scope", "Rent has gone up so much that families are moving out of the neighborhood."],
-  ["out-of-scope", "There is no grocery store within walking distance so we buy food at the gas station."],
   ["out-of-scope", "The sidewalks are icy all winter and older people are afraid to walk."],
   ["out-of-scope", "Our school does not have enough laptops for students to do homework."],
   ["out-of-scope", "Cars speed through the residential street and someone is going to get hurt."],
@@ -151,6 +151,38 @@ export const trainingData = [
   ["out-of-scope", "Childcare spaces are full and the waitlist is over a year."],
   ["out-of-scope", "Tenants in our building keep getting renovictions."],
   ["out-of-scope", "There's broken glass all over the basketball court."],
+  ["out-of-scope", "The streetlights on our block have been out for a month."],
+
+  // food-access-navigator: households without enough food, usually from low income
+  ["food-access-navigator", "Families in our building run out of food before the end of every month."],
+  ["food-access-navigator", "Parents are skipping meals so their kids can eat."],
+  ["food-access-navigator", "After paying rent there is almost no money left for groceries."],
+  ["food-access-navigator", "The food bank line goes around the block and they run out of food early."],
+  ["food-access-navigator", "Kids come to school hungry because there is nothing to eat at home."],
+  ["food-access-navigator", "Grocery prices went up so much that we can't afford healthy food anymore."],
+  ["food-access-navigator", "My neighbours are working full time and still can't afford enough food."],
+  ["food-access-navigator", "Students at our school rely on the breakfast program because their families can't buy groceries."],
+  ["food-access-navigator", "Seniors on a pension are eating one meal a day to make their money last."],
+  ["food-access-navigator", "People don't have enough food to feed themselves in our neighbourhood."],
+  ["food-access-navigator", "A lot of families here are going hungry and are embarrassed to ask for help."],
+  ["food-access-navigator", "Single parents can't stretch their paycheque to cover rent and food."],
+  ["food-access-navigator", "Newcomer families don't know which benefits they qualify for and are running short of food."],
+  ["food-access-navigator", "The food hampers help for a week but families are back in the same situation next month."],
+  ["food-access-navigator", "University students are living on instant noodles because they can't afford groceries."],
+  ["food-access-navigator", "Our community fridge is empty within an hour of being stocked."],
+  ["food-access-navigator", "People in our co-op are choosing between paying bills and buying food."],
+  ["food-access-navigator", "Many households don't have enough to eat by the end of the week."],
+  ["food-access-navigator", "Families on social assistance can't afford enough food for their kids."],
+  ["food-access-navigator", "Food costs keep rising and people in our area are going without meals."],
+  ["food-access-navigator", "Teens are hungry after school and there is no free meal program nearby."],
+  ["food-access-navigator", "Some of my classmates don't bring lunch because their families can't afford it."],
+  ["food-access-navigator", "Laid-off workers in our town are lining up at the food bank for the first time."],
+  ["food-access-navigator", "Families are filling up on cheap food because fresh food costs too much."],
+  ["food-access-navigator", "People with disabilities on fixed incomes run out of grocery money every month."],
+  ["food-access-navigator", "Kids at our school come in hungry and skip lunch because there is no food at home."],
+  ["food-access-navigator", "The school breakfast program ran out and students are hungry in class."],
+  ["food-access-navigator", "Children at the elementary school are too hungry to focus in the morning."],
+  ["food-access-navigator", "Students skip lunch at school because their parents can't afford to pack one."],
 ];
 
 // Which clarifying question resolves confusion between two paths.
@@ -176,6 +208,22 @@ export const clarifiers = {
     question: "Is the main problem where to plant trees, or where people can go to cool off?",
     choices: ["Where to plant trees", "Where people can cool off", "Not sure"],
   },
+  "food-access-navigator|senior-cool-bundles": {
+    question: "Is the main problem not having enough food, or keeping a home cool?",
+    choices: ["Not enough food", "Keeping a home cool", "Both"],
+  },
+  "food-access-navigator|overnight-cool-refuge": {
+    question: "Is the main problem not having enough food, or having nowhere safe to stay?",
+    choices: ["Not enough food", "Nowhere safe to stay", "Both"],
+  },
+  "food-access-navigator|shade-school-routes": {
+    question: "Is the main problem kids not getting enough to eat, or heat on the way to school?",
+    choices: ["Not enough to eat", "Heat on the way to school", "Both"],
+  },
+  "canopy-index|food-access-navigator": {
+    question: "Is this about people not having enough food, or about trees and heat in the area?",
+    choices: ["Not enough food", "Trees and heat", "Not sure"],
+  },
   "overnight-cool-refuge|shade-school-routes": {
     question: "Who is most affected: children on school trips, or people without housing?",
     choices: ["Children going to school", "People without housing", "Both"],
@@ -196,4 +244,10 @@ export const answerHints = {
   "Where people can cool off": "cooling center shelter overnight",
   "Children going to school": "children school walk recess",
   "People without housing": "unhoused homeless shelter overnight",
+  "Not enough food": "food hungry groceries meals afford",
+  "Not enough to eat": "food hungry meals lunch afford",
+  "Keeping a home cool": "apartment hot cooling air conditioning",
+  "Nowhere safe to stay": "unhoused homeless shelter overnight",
+  "Heat on the way to school": "school walk shade hot sidewalk",
+  "Trees and heat": "trees canopy heat map",
 };

@@ -4,7 +4,7 @@
 import { LABELS, trainingData } from "./training-data.js";
 
 const STOPWORDS = new Set(
-  "a an and are as at be but by can do does for from has have how i in is it its of on or our so that the their them there they this to was we what when where which who why will with you your my me us not no".split(
+  "a an and are as at be but by can do does for from has have how i in is it its of on or our so that the their them there they this to was we what when where which who why will with you your my me us not no don doesn didn isn aren wasn won couldn shouldn ve ll re".split(
     " ",
   ),
 );

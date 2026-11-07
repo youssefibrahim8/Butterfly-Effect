@@ -35,8 +35,8 @@ $env:PORT=4174; node server.mjs
 Butterfly Effect runs on **our own AI model**, with no external AI API.
 
 - **Model** (`model.js`): a multinomial Naive Bayes text classifier (unigrams + bigrams, Laplace smoothing) written from scratch. It trains in the browser on load.
-- **Training data** (`training-data.js`): 125 hand-labeled, fictional resident concerns across 5 classes (four opportunity paths plus "outside this sample").
-- **Evaluation:** leave-one-out accuracy is 85% (106/125). The four heat paths score 24–25 out of 25 each; off-topic detection is the weak spot (8/25), so the agent adds an explicit scope check, a minimum word count, and a confidence floor. The full confusion matrix is in the app's **How it works → Model card**. Re-run with `node -e "import('./model.js').then(m=>console.log(m.evaluate()))"`.
+- **Training data** (`training-data.js`): 154 hand-labeled, fictional resident concerns across 6 classes (five opportunity paths plus "outside this sample").
+- **Evaluation:** leave-one-out accuracy is 84% (130/154). The heat paths score 23–25 out of 25 and food access 26/29; off-topic detection is the weak spot (7/25), so the agent adds an explicit scope check, a minimum word count, and a confidence floor. The full confusion matrix is in the app's **How it works → Model card**. Re-run with `node -e "import('./model.js').then(m=>console.log(m.evaluate()))"`.
 - **Explainability:** for each prediction, the UI shows the probability of every class and the words that pushed it toward the winner.
 
 The **agent** (`agent.js`) uses the model's confidence to plan each run:
@@ -51,7 +51,7 @@ The discovery view shows every step. After each run, the app fires a `butterfly:
 ## The demo flow
 
 1. **Share a community concern.** The homepage form asks what is happening, who or where it affects, and optional context or ideas. Click **Try a sample concern** to run a fictional composite through the flow.
-2. **Look for a thread.** A local, rule-based matcher compares the words shared with hand-written topic clues for the four sample opportunities. A domain-specific primary cue plus at least two overlapping clues is required, so loose word matches do not become confident results.
+2. **Look for a thread.** A local, rule-based matcher compares the words shared with hand-written topic clues for the five sample opportunities (used as a cross-check on the model). A domain-specific primary cue plus at least two overlapping clues is required, so loose word matches do not become confident results.
 3. **Read the discovery view.** The first possible connection shows a possible shared cause or gap, related source-supported problems, a potential intervention, real source links, uncertainty, risks, and one practical next step. Lower-scoring overlaps appear as other threads to explore.
 4. **No match, honestly.** If nothing overlaps enough, the app says so, explains why, and offers five example concerns instead of inventing a result.
 5. **Open the full evidence path.** Every match links into the existing portfolio detail, score breakdown, evidence ledger, and Markdown brief export.

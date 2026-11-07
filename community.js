@@ -21,6 +21,17 @@ export const sampleConcern = {
 
 export const concernExamples = [
   {
+    id: "example-food-insecurity",
+    label: "Not enough food to get by",
+    preview:
+      "Families run out of food before the end of the month, even with the food bank.",
+    concern:
+      "People in my neighbourhood don't have enough food to feed themselves. Families run out of groceries before the end of the month, and the food bank runs out early.",
+    who: "Families and seniors in Vanier, Ottawa.",
+    context:
+      "Some parents skip meals so their kids can eat. Rent keeps going up and many people work but still can't cover food.",
+  },
+  {
     id: "example-ottawa-shelter",
     label: "Nowhere cool overnight downtown",
     preview:
@@ -89,6 +100,26 @@ export const concernExamples = [
 ];
 
 const CUE_CONFIG = {
+  "food-access-navigator": {
+    cues: [
+      {
+        label: "food or hunger",
+        weight: 3,
+        primary: true,
+        terms: ["food", "hungry", "hunger", "meal", "meals", "groceries", "grocery", "eat", "eating", "food bank", "skip meals"],
+      },
+      {
+        label: "money or cost",
+        weight: 2,
+        terms: ["afford", "money", "cost", "price", "prices", "rent", "income", "paycheque", "paycheck", "bill", "bills", "expensive"],
+      },
+      {
+        label: "families or children",
+        weight: 1,
+        terms: ["family", "families", "kid", "kids", "child", "children", "parent", "parents", "student", "students"],
+      },
+    ],
+  },
   "canopy-index": {
     cues: [
       {

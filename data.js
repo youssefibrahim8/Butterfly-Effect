@@ -179,6 +179,66 @@ export const sources = [
     summary:
       "Cool environments are linked to reduced heat mortality, but evidence on cooling-center utilization and effectiveness is limited. Awareness, transport, trust, hours, and safety shape access.",
   },
+  {
+    id: "proof-food",
+    short: "PROOF food insecurity",
+    title: "Household Food Insecurity in Canada",
+    publisher: "PROOF · University of Toronto",
+    year: "2025",
+    type: "Research program",
+    strength: "Strong",
+    url: "https://proof.utoronto.ca/food-insecurity/",
+    summary:
+      "Canadian research on household food insecurity: it is driven mainly by inadequate, insecure income, is linked to poorer physical and mental health, and most food-insecure households do not use food banks.",
+  },
+  {
+    id: "usda-food",
+    short: "USDA food security",
+    title: "Food Security in the U.S.",
+    publisher: "USDA Economic Research Service",
+    year: "2025",
+    type: "Government statistics",
+    strength: "Strong",
+    url: "https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us",
+    summary:
+      "Defines food security levels and tracks how many households lack consistent access to enough food for an active, healthy life, with higher rates among low-income households and households with children.",
+  },
+  {
+    id: "fbc-hungercount",
+    short: "Food Banks Canada",
+    title: "HungerCount and food bank use in Canada",
+    publisher: "Food Banks Canada",
+    year: "2025",
+    type: "National survey / report",
+    strength: "Moderate",
+    url: "https://hungercount.foodbankscanada.ca/",
+    summary:
+      "National reporting on food bank visits across Canada. Food bank use has risen sharply in recent years, with high costs of food and housing among the main reasons people give.",
+  },
+  {
+    id: "fao-sofi",
+    short: "FAO food security report",
+    title: "The State of Food Security and Nutrition in the World",
+    publisher: "Food and Agriculture Organization of the United Nations",
+    year: "2025",
+    type: "Global report",
+    strength: "Moderate–strong",
+    url: "https://www.fao.org/publications/home/fao-flagship-publications/the-state-of-food-security-and-nutrition-in-the-world/en",
+    summary:
+      "Annual global assessment of hunger and food insecurity. Treats affordability of a healthy diet as a central driver of food insecurity alongside access and availability.",
+  },
+  {
+    id: "feeding-america",
+    short: "Map the Meal Gap",
+    title: "Map the Meal Gap",
+    publisher: "Feeding America",
+    year: "2025",
+    type: "Data tool",
+    strength: "Moderate",
+    url: "https://map.feedingamerica.org/",
+    summary:
+      "Local estimates of food insecurity and the cost of a meal by county. Shows that food insecurity varies widely between nearby places and that many food-insecure people earn too much for public food assistance.",
+  },
 ];
 
 const opportunitiesRaw = [
@@ -671,6 +731,119 @@ const opportunitiesRaw = [
       ],
       killCriteria:
         "Stop if sites serve very few of the target population, if safe staffing cannot be sustained, or if no measurable benefit appears across two heat seasons.",
+    },
+  },
+  {
+    id: "food-access-navigator",
+    title: "Income-first food access navigator",
+    shortTitle: "Food access navigator",
+    tagline:
+      "Pair emergency food with help claiming the income supports families are missing.",
+    track: "Food & income",
+    domains: ["Food security", "Income", "Public health", "Community services"],
+    hypothesis:
+      "If a trusted community site pairs emergency food with on-the-spot help claiming benefits and tax credits, then more households will move from crisis to stability than with food hampers alone, because food insecurity is driven mainly by inadequate income.",
+    scores: {
+      evidence: 84,
+      impact: 86,
+      novelty: 70,
+      feasibility: 80,
+      certainty: 60,
+      risk: 3,
+    },
+    uncertaintyNote:
+      "The link between income and food insecurity is well established, but how much a local navigator raises benefit uptake, and for how long, depends on who visits and which supports they qualify for.",
+    unknowns: [
+      "How many visitors are eligible for supports they are not receiving.",
+      "Whether families return for follow-up help once the immediate crisis passes.",
+      "Whether stigma keeps the hardest-hit households from coming at all.",
+    ],
+    path: [
+      {
+        phase: "Signal",
+        kind: "reported",
+        domain: "Food security",
+        title: "Food insecurity is mainly an income problem",
+        claim:
+          "Household food insecurity is driven mainly by inadequate, insecure income, and affordability of a healthy diet is a central driver worldwide.",
+        sources: ["proof-food", "fao-sofi"],
+        edge: "raises",
+      },
+      {
+        phase: "Gap",
+        kind: "inferred",
+        domain: "Community services",
+        title: "Food help rarely connects to income help",
+        claim:
+          "Emergency food programs meet the immediate need but often do not help people claim the benefits, credits, or subsidies that could reduce how often they run short.",
+        edge: "checked against",
+      },
+      {
+        phase: "Evidence anchor",
+        kind: "reported",
+        domain: "Public health",
+        title: "Need is rising and many families fall through gaps",
+        claim:
+          "Food bank use has risen sharply in Canada, most food-insecure households do not use food banks, and many food-insecure people earn too much to qualify for public food assistance.",
+        sources: ["fbc-hungercount", "proof-food", "feeding-america", "usda-food"],
+        edge: "motivates",
+      },
+      {
+        phase: "Opportunity",
+        kind: "inferred",
+        domain: "Income",
+        title: "Add a benefits navigator to food distribution",
+        claim:
+          "At an existing food bank, school, or community centre, offer a short, private check-in that helps families file taxes and apply for benefits they qualify for, alongside the food they came for.",
+        edge: "would be tested by",
+      },
+      {
+        phase: "Outcome to test",
+        kind: "inferred",
+        domain: "Food security",
+        title: "Do fewer families run out of food three months later?",
+        claim:
+          "Measure new benefits claimed and whether households report running out of food less often, treating results as local evidence rather than proof of cause.",
+      },
+    ],
+    risks: [
+      {
+        severity: "Medium",
+        title: "Stigma and privacy",
+        detail:
+          "Asking about income in a food line can feel intrusive and may keep people away.",
+        mitigation:
+          "Make the check-in optional and private, staff it with trusted community workers, and never make food conditional on it.",
+      },
+      {
+        severity: "Medium",
+        title: "Treating a symptom as the cure",
+        detail:
+          "A navigator cannot fix incomes that are too low even with every benefit claimed.",
+        mitigation:
+          "Track and share where supports fall short so the data can inform advocacy, not just service delivery.",
+      },
+      {
+        severity: "Low",
+        title: "Volunteer capacity",
+        detail: "Benefits help needs trained people and steady hours.",
+        mitigation:
+          "Partner with free tax clinics and legal or social service agencies instead of training from scratch.",
+      },
+    ],
+    test: {
+      title: "Eight-week navigator pilot at one food distribution site",
+      timeframe: "8 weeks + 3-month follow-up",
+      design:
+        "Offer an optional benefits and tax check-in at one weekly food distribution. Track supports claimed, and ask consenting families at three months how often they ran out of food, compared with visitors before the pilot.",
+      measures: [
+        "Households offered and accepting a check-in",
+        "New benefits or credits claimed",
+        "Self-reported food shortfalls at 3 months",
+        "Visitor experience and trust",
+      ],
+      killCriteria:
+        "Stop or redesign if few visitors want the check-in, if it lowers attendance at the food program, or if almost no new supports are claimed.",
     },
   },
 ];

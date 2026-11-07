@@ -820,6 +820,7 @@ const SHORT_LABELS = {
   "senior-cool-bundles": "Senior housing",
   "shade-school-routes": "School routes",
   "overnight-cool-refuge": "Overnight refuge",
+  "food-access-navigator": "Food access",
   "out-of-scope": "Outside sample",
 };
 
@@ -866,8 +867,8 @@ function modelCardMarkup() {
       <p>
         <strong>Known weakness:</strong> it spots off-topic concerns only ${oos.correct} of ${oos.total}
         times, because "everything else" is hard to learn from a few examples. So the agent adds
-        three checks around the model: a scope rule (the concern must mention heat, sun, shade,
-        cooling, or trees), a minimum number of recognized words, and a 40% confidence floor.
+        three checks around the model: a scope rule (the concern must mention heat, shade, cooling,
+        trees, or food), a minimum number of recognized words, and a 40% confidence floor.
         Vague concerns are also sensitive to wording, which is why the agent asks a question when it is unsure.
       </p>
     </section>
@@ -906,7 +907,7 @@ function renderMethodDialog() {
       <article class="pipeline-card">
         <span class="pipeline-index">02</span>
         <h3>Our model reads it</h3>
-        <p>A classifier we trained ourselves picks the closest of four paths, or none. If it is torn between two, the agent asks you first.</p>
+        <p>A classifier we trained ourselves picks the closest of five paths, or none. If it is torn between two, the agent asks you first.</p>
       </article>
       <article class="pipeline-card">
         <span class="pipeline-index">03</span>
@@ -975,7 +976,7 @@ function renderMethodDialog() {
       <h3>What this demo is — and isn't</h3>
       <ul class="limits-list">
         <li><strong>It works offline.</strong> The concern matcher is a small local keyword rule. There are no live model, retrieval, geospatial, or API calls.</li>
-        <li><strong>It's a sample, not a local study.</strong> The dataset covers four opportunity paths in urban heat, health, shade, and housing. A concern outside that scope is shown as a no-match.</li>
+        <li><strong>It's a sample, not a local study.</strong> The dataset covers five opportunity paths in urban heat, health, shade, housing, and food access. A concern outside that scope is shown as a no-match.</li>
         <li><strong>It's not causal inference.</strong> Scores are analyst judgments on a fixed rubric, not statistical estimates.</li>
         <li><strong>It doesn't invent evidence.</strong> Source links are real reference material. The sample does not generate new studies, statistics, or impact claims.</li>
         <li><strong>It's intentionally falsifiable.</strong> Every opportunity includes unknowns, risks, and kill criteria.</li>
@@ -1475,7 +1476,7 @@ function noMatchMarkup() {
         <span class="info-label info-label--caution">No sample match</span>
         <h3>Why this can happen</h3>
         <p>
-          The words you shared did not overlap enough with the four opportunity paths in this local
+          The words you shared did not overlap enough with the five opportunity paths in this local
           sample. That is not a judgment that nothing can be done. It means this demo cannot
           suggest a thread without stretching what the sample contains.
         </p>
@@ -1484,7 +1485,7 @@ function noMatchMarkup() {
           just to make a result appear.
         </p>
         <div class="no-match-actions">
-          <a class="button button-primary" href="#portfolio">Browse the four opportunities <span aria-hidden="true">↓</span></a>
+          <a class="button button-primary" href="#portfolio">Browse the five opportunities <span aria-hidden="true">↓</span></a>
           <button class="button button-ghost" type="button" data-edit-concern>Edit my concern</button>
         </div>
       </div>
@@ -1495,7 +1496,7 @@ function noMatchMarkup() {
             <span class="info-label info-label--sample">Sample concerns</span>
             <h3 id="examples-title">Try an example to see the flow</h3>
           </div>
-          <p>Each example is fictional and written to fit one of the four sample opportunities.</p>
+          <p>Each example is fictional and written to fit one of the five sample opportunities.</p>
         </div>
         <div class="example-grid">${examples}</div>
       </section>

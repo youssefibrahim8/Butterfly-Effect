@@ -13,9 +13,9 @@ People notice local problems first: the walk to school with no shade, a grandpar
 
 ### What it does
 You describe a concern in plain words. Our agent:
-1. **Reads it with our own trained model**, a Naive Bayes classifier we wrote from scratch, which scores the concern against four researched heat and health interventions plus "outside this sample".
+1. **Reads it with our own trained model**, a Naive Bayes classifier we wrote from scratch, which scores the concern against five researched interventions on heat, health, and food, plus "outside this sample".
 2. **Decides what to do next.** If the model is torn between two paths, the agent asks you one clarifying question chosen for that pair (for example, "Do the people affected have a home they can stay in?") and re-classifies with your answer. If the concern is off-topic or the model isn't confident, it stops and says so instead of inventing a result.
-3. **Uses tools**: it reads the chosen opportunity path, searches an evidence library of 11 real publications (EPA, WHO, CDC, US DOE, and others), and cross-checks itself against a second, hand-written keyword method.
+3. **Uses tools**: it reads the chosen opportunity path, searches an evidence library of 16 real publications (EPA, WHO, CDC, PROOF at the University of Toronto, Food Banks Canada, FAO, and others), and cross-checks itself against a second, hand-written keyword method.
 4. **Writes a cited brief**: what it found, why, what's uncertain, and one low-cost next step, keeping community input, source-supported claims, and system-inferred ideas visibly separate.
 
 Every step is shown on screen, along with the model's probability for each path and the words that drove its decision.
@@ -24,12 +24,12 @@ Every step is shown on screen, along with the model's probability for each path 
 
 ### How we built it
 - Plain HTML, CSS, and JavaScript, with a zero-dependency Node server. It runs fully offline in the browser.
-- **Our own AI, no external API:** multinomial Naive Bayes over words and word pairs, with Laplace smoothing, trained in the browser on 125 hand-labeled, fictional resident concerns.
-- **Measured honestly:** 85% leave-one-out accuracy (106/125). The app shows the full confusion matrix in its model card.
+- **Our own AI, no external API:** multinomial Naive Bayes over words and word pairs, with Laplace smoothing, trained in the browser on 154 hand-labeled, fictional resident concerns.
+- **Measured honestly:** 84% leave-one-out accuracy (130/154). The app shows the full confusion matrix in its model card.
 - **Agent logic:** the agent uses the model's confidence and margin to choose between asking, stopping, or investigating, then runs its tools and writes the brief.
 
 ### Challenges we ran into
-- **Off-topic detection:** with little data, the model catches off-topic concerns only 8 of 25 times. We added an explicit scope check, a minimum word count, and a confidence floor so the agent stops honestly instead of guessing.
+- **Off-topic detection:** with little data, the model catches off-topic concerns only 7 of 25 times. We added an explicit scope check, a minimum word count, and a confidence floor so the agent stops honestly instead of guessing.
 - **Vague concerns** are sensitive to wording, which is exactly why the agent asks a question when it's unsure.
 
 ### Accomplishments we're proud of
@@ -66,11 +66,13 @@ Start the server first with `node server.mjs` and open the URL it prints. Close 
 
 4. **The brief (20s).** Scroll to the brief and sources. "Every supported claim links to a real source, and it tells you what's uncertain and one low-cost next step."
 
+4a. **Food example (15s).** Scroll to the top and click **Try the food example** in the banner. "Same agent, a different problem: families who don't have enough food. It matches an income-first food access path and cites PROOF at the University of Toronto and Food Banks Canada."
+
 4b. **Community feed (15s).** In the panel under the result, click **Add to local feed**, then **This affects me too** on a post. "When residents report the same kind of problem, the signals add up, so a group can bring a stronger case to the city. Sample posts are labeled fictional, and support isn't treated as proof."
 
 5. **Honest no (15s).** Click **Edit concern** and type `The soccer field has no lights so we cannot play after dark.` with `Residents in Vanier, Ottawa`. "It's outside what we trained on, so it says so instead of making something up."
 
-6. **Model card (10s).** Open **How it works** and show the model card. "85% leave-one-out accuracy, and here's exactly where it gets confused."
+6. **Model card (10s).** Open **How it works** and show the model card. "84% leave-one-out accuracy, and here's exactly where it gets confused."
 
 **Close:** "We built and trained the AI ourselves, it knows when it's unsure, and it shows its work."
 

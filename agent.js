@@ -11,9 +11,9 @@ const OUT = "out-of-scope";
 const ASK_MARGIN = 0.45; // ask when the top two paths are this close
 const MIN_CONFIDENCE = 0.4; // below this, say "no match" instead of guessing
 const MIN_KNOWN_WORDS = 3; // the model must recognize a few words to judge
-// Explicit scope rule: this sample only covers heat-related concerns.
+// Explicit scope rule: this sample covers heat-related and food-related concerns.
 const DOMAIN_TERMS =
-  /\b(heat\w*|hot\w*|warm\w*|cool\w*|temperature\w*|sun\w*|summer\w*|shade\w*|shady|tree\w*|canop\w*|air[- ]?condition\w*|a\/?c|swelter\w*|humid\w*|overheat\w*|stifl\w*|fans?|bak\w*|oven\w*|thirst\w*|dehydrat\w*|splash\w*)\b/i;
+  /\b(heat\w*|hot\w*|warm\w*|cool\w*|temperature\w*|sun\w*|summer\w*|shade\w*|shady|tree\w*|canop\w*|air[- ]?condition\w*|a\/?c|swelter\w*|humid\w*|overheat\w*|stifl\w*|fans?|bak\w*|oven\w*|thirst\w*|dehydrat\w*|splash\w*|food\w*|hung\w*|starv\w*|meals?|lunch\w*|breakfast\w*|dinner\w*|grocer\w*|eat\w*|fridge\w*|hamper\w*|nutrition\w*)\b/i;
 
 const pct = (value) => `${Math.round(value * 100)}%`;
 const titleOf = (id) => opportunities.find((item) => item.id === id)?.title ?? id;
@@ -65,7 +65,7 @@ function noMatch(prediction, tools, reason) {
     tools,
     brief: {
       opportunityId: null,
-      summary: "This concern does not fit any of the four heat and health paths in our sample, so the agent is not forcing a result.",
+      summary: "This concern does not fit any of the five heat, health, and food paths in our sample, so the agent is not forcing a result.",
       why: reason,
       uncertainty: "The model only knows the examples it was trained on. A real concern can matter even when it is outside this sample.",
       nextStep: "Try an example concern below, or bring this concern to a local councillor or community association.",
@@ -92,11 +92,11 @@ export function runCommunityAgent(input) {
   tools.push({
     name: "Scope check",
     detail: inDomain
-      ? "The concern mentions heat, sun, shade, cooling, or trees, which this sample covers."
-      : "The concern never mentions heat, sun, shade, cooling, or trees.",
+      ? "The concern mentions heat or food, which this sample covers."
+      : "The concern never mentions heat, shade, cooling, trees, or food.",
   });
   if (!inDomain) {
-    return noMatch(prediction, tools, "This sample only covers heat-related concerns, and none of those topics came up.");
+    return noMatch(prediction, tools, "This sample only covers heat and food concerns, and neither came up.");
   }
 
   if (prediction.knownWords < MIN_KNOWN_WORDS) {
@@ -126,7 +126,7 @@ export function runCommunityAgent(input) {
   }
 
   if (prediction.label === OUT) {
-    return noMatch(prediction, tools, `The model rated this ${pct(prediction.confidence)} likely to be outside the sample's heat and health scope.`);
+    return noMatch(prediction, tools, `The model rated this ${pct(prediction.confidence)} likely to be outside the sample's heat, health, and food scope.`);
   }
   if (prediction.confidence < MIN_CONFIDENCE) {
     return noMatch(prediction, tools, `The best guess reached only ${pct(prediction.confidence)} confidence, below the ${pct(MIN_CONFIDENCE)} bar for suggesting a path.`);

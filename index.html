@@ -79,26 +79,87 @@
     </header>
 
     <main id="main" tabindex="-1">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero-copy">
+      <section class="civic-banner" id="top" aria-labelledby="hero-title">
+        <svg class="civic-banner-art" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <rect width="1440" height="380" fill="#dcefe6" />
+          <circle cx="1240" cy="70" r="38" fill="#f6d77a" />
+          <path d="M0 210 C220 150 380 190 560 165 C760 138 900 190 1100 160 C1260 136 1360 160 1440 150 V380 H0Z" fill="#b9dcb0" />
+          <path d="M0 260 C180 220 340 250 520 232 C720 212 880 262 1080 238 C1240 220 1350 236 1440 228 V380 H0Z" fill="#8cc49a" />
+          <path d="M0 380 V318 C160 300 300 330 470 306 C640 282 760 338 960 314 C1140 292 1300 322 1440 300 V380Z" fill="#5fa97a" />
+          <path d="M610 380 C640 330 700 300 780 282 C880 260 960 250 1040 228 L1080 238 C1000 262 920 276 820 300 C740 320 700 350 690 380Z" fill="#8fd0dc" />
+          <g fill="#f3efe4">
+            <rect x="96" y="176" width="70" height="56" />
+            <rect x="182" y="188" width="54" height="46" />
+            <rect x="1150" y="168" width="64" height="58" />
+            <rect x="1232" y="182" width="50" height="44" />
+            <rect x="300" y="214" width="48" height="40" />
+          </g>
+          <g fill="#7b86c2">
+            <path d="M90 180 L131 146 L172 180Z" />
+            <path d="M1144 172 L1182 140 L1220 172Z" />
+          </g>
+          <g fill="#e2876a">
+            <path d="M178 192 L209 166 L240 192Z" />
+            <path d="M1228 186 L1257 160 L1286 186Z" />
+            <path d="M296 218 L324 194 L352 218Z" />
+          </g>
+          <g fill="#4f9468">
+            <circle cx="40" cy="214" r="30" /><circle cx="262" cy="210" r="22" /><circle cx="420" cy="236" r="26" />
+            <circle cx="1100" cy="206" r="26" /><circle cx="1330" cy="200" r="30" /><circle cx="1400" cy="230" r="22" />
+          </g>
+          <g fill="#6b5a45">
+            <rect x="37" y="238" width="6" height="24" /><rect x="259" y="226" width="6" height="18" /><rect x="417" y="256" width="6" height="20" />
+            <rect x="1097" y="226" width="6" height="20" /><rect x="1327" y="224" width="6" height="24" /><rect x="1397" y="246" width="6" height="18" />
+          </g>
+          <g>
+            <circle cx="520" cy="292" r="9" fill="#3b4a6b" /><rect x="512" y="302" width="16" height="30" rx="5" fill="#e2876a" />
+            <circle cx="546" cy="298" r="7" fill="#3b4a6b" /><rect x="540" y="306" width="12" height="22" rx="4" fill="#7b86c2" />
+            <circle cx="900" cy="300" r="9" fill="#3b4a6b" /><rect x="892" y="310" width="16" height="30" rx="5" fill="#f6d77a" />
+          </g>
+        </svg>
+        <div class="civic-banner-card">
           <p class="eyebrow">For residents and community groups</p>
-          <h1 id="hero-title">Describe a problem on your street. See what the evidence says.</h1>
+          <h1 id="hero-title">Describe a problem in your community. See what the evidence says.</h1>
           <p class="hero-lede">
-            A small model we trained ourselves reads your concern and matches it to one of four
-            researched heat and health interventions. You get the sources behind it, what is still
+            A small model we trained ourselves reads your concern and matches it to one of five
+            researched interventions on heat, health, and food. You get the sources, what is still
             uncertain, and one thing you could try next.
           </p>
-          <div class="hero-principles" aria-label="How information is labeled">
-            <span class="principle principle--community">Community input</span>
-            <span class="principle principle--source">Source-supported claims</span>
-            <span class="principle principle--inferred">System-inferred hypotheses</span>
+          <div class="civic-banner-actions">
+            <a class="button button-primary" href="#share">Share a concern</a>
+            <button class="button button-ghost" type="button" data-example-id="example-food-insecurity">
+              Try the food example
+            </button>
           </div>
+        </div>
+      </section>
+
+      <section class="hero" aria-label="Share a concern">
+        <div class="hero-copy">
+          <h2 class="hero-side-title">How it works</h2>
+          <ol class="how-list">
+            <li>
+              <span class="how-kicker">Step 1</span>
+              <strong>Our model reads your concern</strong>
+              <p>A classifier trained on 154 example concerns picks the closest of five paths, or none.</p>
+            </li>
+            <li>
+              <span class="how-kicker">Step 2</span>
+              <strong>The agent asks if it's unsure</strong>
+              <p>When two paths are close, it asks you one question instead of guessing.</p>
+            </li>
+            <li>
+              <span class="how-kicker">Step 3</span>
+              <strong>You get a cited brief</strong>
+              <p>Real sources, what's uncertain, and one low-cost next step. Then share it with neighbours.</p>
+            </li>
+          </ol>
           <p class="hero-disclaimer">
             Results are leads to look into, not proven causes or guaranteed fixes.
           </p>
           <p class="hero-secondary">
             Prefer to browse first?
-            <a href="#portfolio">Explore the four sample opportunities</a>.
+            <a href="#portfolio">Explore the five sample opportunities</a>.
           </p>
         </div>
 
@@ -195,7 +256,7 @@
         <div class="sample-band-intro">
           <span class="sample-band-kicker">Inside the local sample</span>
           <p>
-            Four opportunity paths, each with two source-supported anchors and three
+            Five opportunity paths, each with two source-supported anchors and three
             system-inferred steps. Every source link is real.
           </p>
         </div>
@@ -235,7 +296,7 @@
             <p class="eyebrow"><span class="eyebrow-rule"></span>Evidence-backed sample</p>
             <h2 id="portfolio-title">Opportunity portfolio</h2>
             <p class="section-sub">
-              Four sample hypotheses to explore. Each path keeps source-supported claims separate
+              Five sample hypotheses to explore. Each path keeps source-supported claims separate
               from system-inferred ideas, and ends with a test you could actually run.
             </p>
           </div>

@@ -2678,3 +2678,216 @@ kbd, code { font-family: "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, mon
 .confusion td.is-hit { background: var(--forest-soft); color: var(--forest-deep); font-weight: 700; }
 .confusion td.is-miss { background: var(--heat-soft); color: var(--heat-deep); }
 @media (max-width: 560px) { .model-card-facts div { grid-template-columns: 1fr; gap: 0.1rem; } }
+
+/* ========================================================================== */
+/* Civic portal theme: white page, navy accents, sans headings, flat cards    */
+/* ========================================================================== */
+
+:root {
+  --paper: #ffffff;
+  --paper-deep: #f1f3f5;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --cream: #ffffff;
+  --ink: #1d2733;
+  --ink-2: #33404f;
+  --muted: #5b6676;
+  --muted-2: #8590a0;
+  --line: #dfe3e8;
+  --line-strong: #c9d0d8;
+  --forest: #1e4089;
+  --forest-deep: #15306a;
+  --forest-soft: #eaf0fa;
+  --teal: #2a7cc7;
+  --teal-deep: #1d5d9b;
+  --teal-soft: #e9f3fb;
+  --reported: #1e6a4a;
+  --reported-soft: #e8f3ec;
+  --serif: var(--sans);
+  --shadow-card: 0 1px 3px rgba(20, 30, 50, 0.08);
+  --shadow-detail: 0 2px 10px rgba(20, 30, 50, 0.08);
+}
+
+body { background: #ffffff; }
+
+h1, h2, h3, h4,
+.hero h1,
+.concern-card-head h2,
+.section-heading h2 {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--forest-deep);
+  letter-spacing: -0.01em;
+}
+
+/* Header: navy top stripe, white brand row, grey nav band. */
+.site-header {
+  position: sticky;
+  border-top: 6px solid var(--forest);
+  border-bottom: 0;
+  background: #ffffff;
+  backdrop-filter: none;
+}
+.header-inner {
+  flex-wrap: wrap;
+  min-height: 0;
+  padding-top: 14px;
+}
+.brand { padding-bottom: 12px; }
+.brand-mark { border-radius: 4px; background: var(--forest); box-shadow: none; }
+.brand-word { color: var(--forest-deep); font-family: var(--sans); font-weight: 700; letter-spacing: -0.02em; }
+.header-nav {
+  flex-basis: 100%;
+  order: 3;
+  margin: 0 calc(50% - 50vw);
+  padding: 0 max(var(--gutter), calc(50vw - var(--content) / 2));
+  background: var(--paper-deep);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  gap: 0;
+  overflow-x: auto;
+}
+.nav-link,
+.header-nav .nav-link {
+  padding: 11px 14px;
+  border-radius: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+.nav-link:hover { background: #e4e8ed; color: var(--forest-deep); }
+.nav-link--primary,
+.nav-link--primary:hover {
+  background: var(--forest);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+/* Illustrated banner with a centered white card. */
+.civic-banner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+  margin: 0 calc(50% - 50vw);
+  padding: 40px var(--gutter);
+  overflow: hidden;
+}
+.civic-banner-art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.civic-banner-card {
+  position: relative;
+  width: min(640px, 100%);
+  padding: 28px 32px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(20, 30, 50, 0.12);
+}
+.civic-banner-card .eyebrow { margin-bottom: 6px; }
+.civic-banner-card h1 {
+  max-width: none;
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1.15;
+}
+.civic-banner-card .hero-lede { margin: 0 auto; font-size: 16px; color: var(--ink-2); }
+.civic-banner-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+
+/* Form left, "How it works" list right. */
+.hero {
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+  padding: 40px 0 32px;
+  gap: clamp(24px, 4vw, 48px);
+}
+.hero .concern-card { order: -1; }
+.hero-side-title { margin: 0 0 14px; font-size: 1.5rem; }
+.how-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.how-list li { padding: 14px 16px; border: 1px solid var(--line); background: #ffffff; }
+.how-kicker { display: block; margin-bottom: 2px; color: var(--muted); font-size: 12px; font-weight: 600; }
+.how-list strong { display: block; color: var(--teal); font-size: 1.1rem; line-height: 1.3; }
+.how-list p { margin: 6px 0 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.55; }
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .civic-banner { min-height: 0; padding: 28px 16px; }
+  .civic-banner-card { padding: 22px 18px; }
+}
+
+/* Flat, square surfaces everywhere. */
+.concern-card,
+.connection-card,
+.match-note,
+.concern-recap,
+.candidate,
+.sample-band,
+.thread-card,
+.example-card,
+.agent-brief,
+.agent-working,
+.agent-step,
+.modal-shell,
+.detail-shell {
+  border-radius: 4px !important;
+  box-shadow: var(--shadow-card) !important;
+  background-image: none !important;
+}
+.button { border-radius: 3px; }
+.button-primary { background: var(--forest); }
+.button-primary:hover { background: var(--forest-deep); }
+.button-ghost { background: #ffffff; border-color: var(--forest); color: var(--forest); }
+.form-field input,
+.form-field textarea { border-radius: 3px; }
+
+/* Card titles in link blue, like a civic news list. */
+.candidate-title,
+.thread-card h4,
+.example-card h4,
+.connection-card h3 { color: var(--teal); }
+.candidate.is-selected { background: var(--forest-deep) !important; }
+.candidate.is-selected .candidate-title { color: #ffffff; }
+
+/* Civic theme fixes */
+.header-nav {
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 0 100vmax var(--paper-deep);
+  clip-path: inset(0 -100vmax);
+  border: 0;
+}
+.site-header { border-bottom: 1px solid var(--line); }
+.header-nav .nav-link--primary,
+.header-nav .nav-link--primary:hover { background: var(--forest); color: #ffffff; }
+.button-primary,
+.button-primary:hover,
+.button-ghost { box-shadow: none; }
+
+/* Civic theme: discovery, detail, and dialogs */
+.discovery-shell,
+.concern-recap,
+.match-note,
+.agent-trace,
+.connection-card,
+.connection-block,
+.caution-block,
+.next-step,
+.more-threads,
+.portfolio .toolbar,
+.detail-shell {
+  background: #ffffff !important;
+  background-image: none !important;
+}
+.discovery h2,
+.discovery h3,
+.discovery h4,
+.detail h2,
+.detail h3,
+.detail h4,
+.modal h2,
+.modal h3 {
+  font-family: var(--sans) !important;
+  font-weight: 700 !important;
+  color: var(--forest-deep);
+  letter-spacing: -0.01em !important;
+}
+.concern-recap blockquote { font-family: var(--sans); font-size: 1.1rem; color: var(--ink); }
+.connection-score strong,
+.candidate-score strong { font-family: var(--sans); font-weight: 700; }
+.concern-recap { border-left-color: var(--forest) !important; }
