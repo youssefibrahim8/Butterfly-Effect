@@ -2663,3 +2663,18 @@ kbd, code { font-family: "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, mon
 /* No entrance animations on page load; content is simply there. */
 .hero-copy, .snapshot, .candidate { animation: none; }
 .agent-step { animation-duration: 200ms; animation-delay: calc(var(--step, 0) * 70ms); }
+
+/* Model card */
+.model-card-facts { display: grid; gap: 0.5rem; margin: 0.75rem 0 1rem; }
+.model-card-facts div { display: grid; grid-template-columns: 9rem 1fr; gap: 0.75rem; }
+.model-card-facts dt { color: var(--muted); font-weight: 600; }
+.model-card-facts dd { margin: 0; color: var(--ink); }
+.confusion-wrap { overflow-x: auto; margin: 0.5rem 0 1rem; }
+.confusion { border-collapse: collapse; font-size: 0.85rem; min-width: 520px; }
+.confusion th, .confusion td { padding: 0.4rem 0.55rem; border: 1px solid var(--line); text-align: center; }
+.confusion th { font-weight: 600; color: var(--muted); background: var(--paper); }
+.confusion th[scope="row"] { text-align: left; }
+.confusion td { font-variant-numeric: tabular-nums; color: var(--muted); }
+.confusion td.is-hit { background: var(--forest-soft); color: var(--forest-deep); font-weight: 700; }
+.confusion td.is-miss { background: var(--heat-soft); color: var(--heat-deep); }
+@media (max-width: 560px) { .model-card-facts div { grid-template-columns: 1fr; gap: 0.1rem; } }

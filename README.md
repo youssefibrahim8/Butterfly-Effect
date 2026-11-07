@@ -35,13 +35,13 @@ $env:PORT=4174; node server.mjs
 Butterfly Effect runs on **our own AI model**, with no external AI API.
 
 - **Model** (`model.js`): a multinomial Naive Bayes text classifier (unigrams + bigrams, Laplace smoothing) written from scratch. It trains in the browser on load.
-- **Training data** (`training-data.js`): 75 hand-labeled, fictional resident concerns across 5 classes (four opportunity paths plus "outside this sample").
-- **Evaluation:** leave-one-out accuracy is about 70% (53/75). Small data, reported honestly. Re-run with `node -e "import('./model.js').then(m=>console.log(m.evaluate()))"`.
+- **Training data** (`training-data.js`): 125 hand-labeled, fictional resident concerns across 5 classes (four opportunity paths plus "outside this sample").
+- **Evaluation:** leave-one-out accuracy is 85% (106/125). The four heat paths score 24–25 out of 25 each; off-topic detection is the weak spot (8/25), so the agent adds an explicit scope check, a minimum word count, and a confidence floor. The full confusion matrix is in the app's **How it works → Model card**. Re-run with `node -e "import('./model.js').then(m=>console.log(m.evaluate()))"`.
 - **Explainability:** for each prediction, the UI shows the probability of every class and the words that pushed it toward the winner.
 
 The **agent** (`agent.js`) uses the model's confidence to plan each run:
 
-1. **Classify** the concern with our model.
+1. **Classify** the concern with our model, and **check scope** with an explicit rule.
 2. **Decide:** if the top two paths are close, ask the resident one clarifying question chosen for that pair, then re-classify with the answer. If the concern looks out of scope, or confidence is too low, stop honestly instead of guessing.
 3. **Use tools:** read the chosen opportunity path, search the evidence library, and cross-check against the hand-written keyword rules.
 4. **Brief:** write a cited brief with the uncertainty and one practical next step.

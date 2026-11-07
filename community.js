@@ -21,6 +21,17 @@ export const sampleConcern = {
 
 export const concernExamples = [
   {
+    id: "example-ottawa-shelter",
+    label: "Nowhere cool overnight downtown",
+    preview:
+      "During heat warnings, people sleeping outside downtown have nowhere to cool down after dark.",
+    concern:
+      "During heat warnings, people sleeping outside near the ByWard Market have nowhere to cool down at night. The cooling centres close in the evening.",
+    who: "Unhoused neighbours in Lowertown, Ottawa.",
+    context:
+      "A community centre nearby is empty overnight. Outreach workers say transport and staffing are the gaps.",
+  },
+  {
     id: "example-school-shade",
     label: "A hot walk to school",
     preview:

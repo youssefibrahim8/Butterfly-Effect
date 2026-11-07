@@ -98,11 +98,28 @@ export function predict(model, text) {
 /** Leave-one-out accuracy: train on all-but-one example, test on the one left out. */
 export function evaluate(examples = trainingData) {
   let correct = 0;
+  const confusion = Object.fromEntries(LABELS.map((a) => [a, Object.fromEntries(LABELS.map((b) => [b, 0]))]));
   examples.forEach((example, index) => {
     const rest = examples.filter((_, other) => other !== index);
-    if (predict(train(rest), example[1]).label === example[0]) correct += 1;
+    const guess = predict(train(rest), example[1]).label;
+    confusion[example[0]][guess] += 1;
+    if (guess === example[0]) correct += 1;
   });
-  return { correct, total: examples.length, accuracy: correct / examples.length };
+  const perClass = Object.fromEntries(
+    LABELS.map((label) => {
+      const row = confusion[label];
+      const total = Object.values(row).reduce((sum, n) => sum + n, 0);
+      return [label, { correct: row[label], total }];
+    }),
+  );
+  return { correct, total: examples.length, accuracy: correct / examples.length, confusion, perClass };
+}
+
+let cachedEvaluation;
+/** Evaluation is ~125 small trainings; compute once, lazily. */
+export function getEvaluation() {
+  cachedEvaluation ??= evaluate();
+  return cachedEvaluation;
 }
 
 export const model = train(trainingData);

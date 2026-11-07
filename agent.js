@@ -8,9 +8,12 @@ import { model, modelInfo, predict } from "./model.js";
 import { answerHints, clarifiers } from "./training-data.js";
 
 const OUT = "out-of-scope";
-const ASK_MARGIN = 0.35; // ask when the top two paths are this close
+const ASK_MARGIN = 0.45; // ask when the top two paths are this close
 const MIN_CONFIDENCE = 0.4; // below this, say "no match" instead of guessing
 const MIN_KNOWN_WORDS = 3; // the model must recognize a few words to judge
+// Explicit scope rule: this sample only covers heat-related concerns.
+const DOMAIN_TERMS =
+  /\b(heat\w*|hot\w*|warm\w*|cool\w*|temperature\w*|sun\w*|summer\w*|shade\w*|shady|tree\w*|canop\w*|air[- ]?condition\w*|a\/?c|swelter\w*|humid\w*|overheat\w*|stifl\w*|fans?|bak\w*|oven\w*|thirst\w*|dehydrat\w*|splash\w*)\b/i;
 
 const pct = (value) => `${Math.round(value * 100)}%`;
 const titleOf = (id) => opportunities.find((item) => item.id === id)?.title ?? id;
@@ -83,6 +86,18 @@ export function runCommunityAgent(input) {
       prediction.confidence,
     )}, runner-up “${titleOf(prediction.runnerUp)}” at ${pct(prediction.probabilities[prediction.runnerUp])}.`,
   });
+
+  const fullText = `${baseText} ${input.settingAnswer ?? ""}`;
+  const inDomain = DOMAIN_TERMS.test(fullText);
+  tools.push({
+    name: "Scope check",
+    detail: inDomain
+      ? "The concern mentions heat, sun, shade, cooling, or trees, which this sample covers."
+      : "The concern never mentions heat, sun, shade, cooling, or trees.",
+  });
+  if (!inDomain) {
+    return noMatch(prediction, tools, "This sample only covers heat-related concerns, and none of those topics came up.");
+  }
 
   if (prediction.knownWords < MIN_KNOWN_WORDS) {
     return noMatch(prediction, tools, `The model recognized only ${prediction.knownWords} words it was trained on, which is too few to judge.`);

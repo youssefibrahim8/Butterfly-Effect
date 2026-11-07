@@ -1,6 +1,7 @@
 import { meta, opportunities, sources } from "./data.js";
 import { concernExamples, sampleConcern } from "./community.js";
 import { runAgent } from "./agent.js";
+import { getEvaluation, modelInfo } from "./model.js";
 
 /* -------------------------------------------------------------------------- */
 /* Helpers                                                                    */
@@ -814,6 +815,65 @@ function sourcesPanelMarkup(sourceIds) {
 /* Dialogs                                                                    */
 /* -------------------------------------------------------------------------- */
 
+const SHORT_LABELS = {
+  "canopy-index": "Canopy index",
+  "senior-cool-bundles": "Senior housing",
+  "shade-school-routes": "School routes",
+  "overnight-cool-refuge": "Overnight refuge",
+  "out-of-scope": "Outside sample",
+};
+
+function modelCardMarkup() {
+  const evaluation = getEvaluation();
+  const labels = Object.keys(evaluation.confusion);
+  const header = labels.map((label) => `<th scope="col">${escapeHtml(SHORT_LABELS[label] ?? label)}</th>`).join("");
+  const rows = labels
+    .map(
+      (actual) => `
+        <tr>
+          <th scope="row">${escapeHtml(SHORT_LABELS[actual] ?? actual)}</th>
+          ${labels
+            .map((guess) => {
+              const n = evaluation.confusion[actual][guess];
+              const cls = actual === guess ? "is-hit" : n ? "is-miss" : "";
+              return `<td class="${cls}">${n}</td>`;
+            })
+            .join("")}
+        </tr>`,
+    )
+    .join("");
+  const oos = evaluation.perClass["out-of-scope"];
+
+  return `
+    <section class="modal-section model-card">
+      <div class="modal-section-head">
+        <h3>Model card</h3>
+        <span class="formula-chip">Trained by us · runs in your browser</span>
+      </div>
+      <dl class="model-card-facts">
+        <div><dt>Model</dt><dd>${escapeHtml(modelInfo.type)}, written from scratch</dd></div>
+        <div><dt>Training data</dt><dd>${modelInfo.examples} hand-written, fictional resident concerns in ${modelInfo.classes} classes</dd></div>
+        <div><dt>Vocabulary</dt><dd>${modelInfo.vocabulary.toLocaleString()} words and word pairs</dd></div>
+        <div><dt>Accuracy</dt><dd><strong>${Math.round(evaluation.accuracy * 100)}%</strong> (${evaluation.correct}/${evaluation.total}), leave-one-out: each example is tested on a model trained without it</dd></div>
+      </dl>
+      <p>Rows are the true label, columns are what the model guessed. Green is correct.</p>
+      <div class="confusion-wrap">
+        <table class="confusion">
+          <thead><tr><th scope="col">True ↓ / guessed →</th>${header}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Known weakness:</strong> it spots off-topic concerns only ${oos.correct} of ${oos.total}
+        times, because "everything else" is hard to learn from a few examples. So the agent adds
+        three checks around the model: a scope rule (the concern must mention heat, sun, shade,
+        cooling, or trees), a minimum number of recognized words, and a 40% confidence floor.
+        Vague concerns are also sensitive to wording, which is why the agent asks a question when it is unsure.
+      </p>
+    </section>
+  `;
+}
+
 function renderMethodDialog() {
   const weightRows = meta.weights
     .map(
@@ -845,8 +905,8 @@ function renderMethodDialog() {
       </article>
       <article class="pipeline-card">
         <span class="pipeline-index">02</span>
-        <h3>Look for a thread</h3>
-        <p>Compare your words with topic clues for four sample opportunities. This is keyword overlap, not a diagnosis.</p>
+        <h3>Our model reads it</h3>
+        <p>A classifier we trained ourselves picks the closest of four paths, or none. If it is torn between two, the agent asks you first.</p>
       </article>
       <article class="pipeline-card">
         <span class="pipeline-index">03</span>
@@ -859,6 +919,8 @@ function renderMethodDialog() {
         <p>End with a practical experiment, its uncertainty, and the risks that could break it.</p>
       </article>
     </div>
+
+    ${modelCardMarkup()}
 
     <section class="modal-section">
       <div class="modal-section-head">
